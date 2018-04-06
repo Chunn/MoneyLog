@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         init();
         registerForContextMenu(lvShow);
         new DoGets().execute("https://192.168.1.11:9000/api/money");
-
+        addMoneyLog();
 
     }
     public void init(){
@@ -96,13 +96,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Integer integer) {
-            if (integer==500){
+            if (integer==400){
                 Toast.makeText(getApplicationContext(),"Fail",Toast.LENGTH_SHORT).show();
                 Log.d("Test","Failed");
             }
             else if(integer==200)
             {
+                
                 moneyAdapter.notifyDataSetChanged();
+                Toast.makeText(getApplicationContext(), "Successful", Toast.LENGTH_SHORT).show();
                 Log.d("Test","Successful");
             }
             super.onPostExecute(integer);
@@ -153,80 +155,7 @@ public class MainActivity extends AppCompatActivity {
             return 200;
         }
     }
-    //Tham số doInBackground, dữ liệu đầu vào, mã lỗi
-    class DoPost extends AsyncTask<String,Void,Integer> {
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            if (integer == 500) {
-                Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_SHORT).show();
-                Log.d("Test", "Failed");
-            } else if (integer == 200) {
-                moneyAdapter.notifyDataSetChanged();
-                Log.d("Test", "Successful");
-            }
-            super.onPostExecute(integer);
-        }
-
-        @Override
-        protected Integer doInBackground(String... paramas) {
-            String urlString = paramas[0];
-            URL url = null;
-            HttpsURLConnection httpsURLConnection = null;
-            InputStream inputStream = null;
-            OutputStream outputStream;
-            String result = "";
-            int c;
-            try {
-                url = new URL(urlString);
-                httpsURLConnection = (HttpsURLConnection) url.openConnection();
-
-                httpsURLConnection.setRequestMethod("POST");
-                httpsURLConnection.setDoInput(true);
-                // đẩy dữ liệu lên server Do Output
-                httpsURLConnection.setDoOutput(true);
-                httpsURLConnection.setRequestProperty("Content-Type","application/json");
-                httpsURLConnection.setRequestProperty("Accept","application/json");
-
-                JSONObject jsonObject=new JSONObject();
-                jsonObject.put("content",paramas[0]);
-                jsonObject.put("amount",paramas[1]);
-                jsonObject.put("note",paramas[2]);
-                jsonObject.put("date",paramas[3]);
-                jsonObject.put("mType",paramas[4]);
-
-                outputStream = new BufferedOutputStream(httpsURLConnection.getOutputStream());
-                outputStream.write(jsonObject.toString().getBytes(Charset.forName("UTF-8")));
-                outputStream.flush();
-                outputStream.close();
-
-                inputStream=httpsURLConnection.getInputStream();
-                //endoffile=-1
-                while ((c = inputStream.read()) != -1) {
-                    result += (char) c;
-
-                }
-                Log.d("test", result);
-
-                JSONArray jsonArray = new JSONArray(result);
-                List<MoneyLog> books = new ArrayList<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    moneyLogs.add(new MoneyLog(jsonObject.getInt("id"), jsonObject.getString("content"),
-                            jsonObject.getInt("amount"), jsonObject.getString("note"), jsonObject.get("date"),
-                            jsonObject.getInt("mType")));
-                }
-                for (MoneyLog moneyLog : moneyLogs) {
-                    Log.d("Kết quả", moneyLog.toString());
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-
-                return 400;
-            }
-            return 200;
-        }
-    }
+   
     public void addMoneyLog(){
 
         fbtn_add.setOnClickListener(new View.OnClickListener() {
