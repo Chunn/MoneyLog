@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MoneyLog</string>
+    <string name="item_edit">Chỉnh sửa</string>
+    <string name="item_delete">Xóa</string>
+    <string name="content">Nội dung</string>
+    <string name="amount">Số tiền</string>
+    <string name="note">Ghi chú</string>
+    <string name="date">Ngày</string>
+    <string name="title">Thông tin thu/chi</string>
+    <string name="hintContent">Nhập nội dung</string>
+    <string name="hintAmount">Nhập số tiền</string>
+    <string name="hintNote">Nhập ghi chú</string>
+    <string name="hintDate">Nhập ngày</string>
+    <string name="mType">Hình thức</string>
+    <string name="thu">Thu</string>
+    <string name="chi">Chi</string>
+    <string name="save">Lưu</string>
+</resources>
